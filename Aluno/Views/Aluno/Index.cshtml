@@ -1,0 +1,60 @@
+﻿@model Aluno.ViewModels.AlunoViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Alunos</h2>
+
+<div id="Form"> <!-- Criar a diasdav de Form -->
+    <div class="editor-label">
+        <b>Pesquisar:</b>
+    </div>
+    <div class="editor-field">
+        @Html.Editor("a")
+
+    </div>
+
+    <p><input type="button" id="Novo" value="Novo" onclick="editar(0);" /></p>
+</div>
+
+<div id="Lista">
+    @Html.Partial("List", Model.alunos)
+</div>
+
+<div id="Dados"></div>
+
+<script>
+    function carregarTabela(a) {
+        $.ajax({
+            type: "GET",
+            dataType: "html",
+            url: "Aluno/List",
+            data: { a: a },
+            success: function (data) {
+                $("#Lista").html(data);
+                $("#Form").show();
+                $("#Lista").show();
+                $("#Dados").hide();
+            }
+        });
+    }
+    function editar(id) {
+        $.ajax({
+            type: "GET",
+            dataType: "html",
+            url: "Aluno/Edit",
+            data: { id: id },
+            success: function (data) {
+                $("#Dados").html(data);
+                $("#Form").hide();
+                $("#Lista").hide();
+                $("#Dados").show();
+            }
+        });
+    }
+
+    $("#a").keyup(function () {
+        carregarTabela($("#a").val());
+    });
+
+</script>
